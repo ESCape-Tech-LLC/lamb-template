@@ -1,0 +1,42 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "stage"
+    - if: $CI_COMMIT_BRANCH == "dev"
+
+
+variables:
+  PROJECT_NAME: {{project_name}}
+  APP_NAME: app
+
+
+default:
+  tags:
+    - docker
+
+
+Build and push image:
+  stage: build
+  before_script:
+    - echo "${HARBOR_TOKEN}" | docker login --username "robot\$alldeploy" --password-stdin ${HARBOR_ADDRESS}
+  script:
+    - >
+      IMAGE_VERSION=$(cat VERSION)
+      IMAGE_VERSION_MINOR=${IMAGE_VERSION%.*}
+      IMAGE_NAME=${HARBOR_ADDRESS}/${PROJECT_NAME}/${APP_NAME}
+
+      if [[ $CI_COMMIT_BRANCH == "master" ]];
+        then
+          IMAGE_NAME_LATEST=${IMAGE_NAME}:latest
+          IMAGE_NAME_TAGGED=${IMAGE_NAME}:${IMAGE_VERSION}
+          IMAGE_NAME_TAGGED_MINOR=${IMAGE_NAME}:${IMAGE_VERSION_MINOR}
+        else
+          IMAGE_NAME_LATEST=${IMAGE_NAME}:${CI_COMMIT_BRANCH}
+          IMAGE_NAME_TAGGED=${IMAGE_NAME}:${CI_COMMIT_BRANCH}-${IMAGE_VERSION}
+          IMAGE_NAME_TAGGED_MINOR=${IMAGE_NAME}:${CI_COMMIT_BRANCH}-${IMAGE_VERSION_MINOR}
+      fi
+    - docker build -t ${IMAGE_NAME_TAGGED} -t ${IMAGE_NAME_LATEST} -t ${IMAGE_NAME_TAGGED_MINOR} -f Dockerfile .
+    - docker inspect ${IMAGE_NAME_TAGGED}
+    - docker push ${IMAGE_NAME_LATEST}
+    - docker push ${IMAGE_NAME_TAGGED}
+    - docker push ${IMAGE_NAME_TAGGED_MINOR}

@@ -1,0 +1,7 @@
+-r requirements-main.txt
+-e ../../Lamb/lamb-core[postgresql,boost,asgi,asyncio,asyncpg,dev]
+
+jupyter
+locust
+clipboard
+watchdog

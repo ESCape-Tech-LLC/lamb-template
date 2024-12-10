@@ -1,0 +1,54 @@
+# OS artifacts
+**/.DS_Store
+.DS_Store
+.idea
+*.pyc
+
+# app artifacts
+static/*
+!static/.gitkeep
+log/*
+!log/.gitkeep
+tmp/*
+!tmp/.gitkeep
+run/*
+!run/.gitkeep
+bkp/*
+!bkp/.gitkeep
+crt/*
+!crt/.gitkeep
+
+# data
+data/geoip/*
+!data/.gitkeep
+!data/geoip/.gitkeep
+!data/handbooks/*.csv
+!data/*.csv
+
+# envs
+env/
+.env
+.env.host
+.env.dev
+
+# playgrounds and utils
+playground*.py
+playground*.ipynb
+playground*.json
+playground*.md
+playground*.sh
+playground*.sql
+snippets.sh
+
+# dev tools
+pre-commit.log
+celerybeat.pid
+celerybeat-schedule.db
+celerybeat-schedule
+
+# Git files
+.gitignore
+
+# Docker build files
+Dockerfile
+.dockerignore

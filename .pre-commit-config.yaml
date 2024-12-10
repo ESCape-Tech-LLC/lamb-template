@@ -1,0 +1,19 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+# useful commands:
+# pip install pre-commit
+# pre-commit install
+# pre-commit install --install-hooks
+# pre-commit autoupdate  # to check latest hooks repos
+
+# run without actual commit
+# pre-commit run --all-files
+# pre-commit run --all-files --color never > pre-commit.log
+
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.2
+    hooks:
+      - id: ruff
+        args: [ --fix ]
+      - id: ruff-format
