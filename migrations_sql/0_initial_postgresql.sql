@@ -1,0 +1,25 @@
+-- PostgreSQL
+\c postgres
+DROP DATABASE IF EXISTS app_core;
+DROP ROLE IF EXISTS app_user;
+
+CREATE ROLE app_user WITH LOGIN PASSWORD 'bVNst38d9g'
+    INHERIT
+    CONNECTION LIMIT -1
+    NOSUPERUSER
+    NOCREATEDB
+    NOCREATEROLE
+    NOREPLICATION;
+
+
+CREATE DATABASE app_core
+    WITH OWNER = app_user
+    ENCODING = 'UTF8'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    LC_COLLATE ='en_US.UTF-8'
+    LC_CTYPE ='en_US.UTF-8'
+    TEMPLATE template0;
+
+\c app_core
+CREATE EXTENSION pgcrypto;
