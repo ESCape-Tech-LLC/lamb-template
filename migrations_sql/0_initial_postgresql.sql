@@ -1,9 +1,10 @@
 -- PostgreSQL
 \c postgres
-DROP DATABASE IF EXISTS app_core;
-DROP ROLE IF EXISTS app_user;
+DROP DATABASE IF EXISTS {{project_name}};
+DROP ROLE IF EXISTS {{project_name}}_user;
 
-CREATE ROLE app_user WITH LOGIN PASSWORD 'bVNst38d9g'
+
+CREATE ROLE {{project_name}}_user WITH LOGIN PASSWORD '{% for s in "x"|rjust:"20" %}{{secret_key|make_list|random}}{%endfor%}'
     INHERIT
     CONNECTION LIMIT -1
     NOSUPERUSER
@@ -12,8 +13,8 @@ CREATE ROLE app_user WITH LOGIN PASSWORD 'bVNst38d9g'
     NOREPLICATION;
 
 
-CREATE DATABASE app_core
-    WITH OWNER = app_user
+CREATE DATABASE {{project_name}}
+    WITH OWNER = {{project_name}}_user
     ENCODING = 'UTF8'
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1
@@ -21,5 +22,5 @@ CREATE DATABASE app_core
     LC_CTYPE ='en_US.UTF-8'
     TEMPLATE template0;
 
-\c app_core
+\c {{project_name}}
 CREATE EXTENSION pgcrypto;
