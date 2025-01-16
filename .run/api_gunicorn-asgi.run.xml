@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="celery:beat" type="PythonConfigurationType" factoryName="Python">
+  <configuration default="false" name="api:gunicorn-asgi" type="PythonConfigurationType" factoryName="Python">
     <module name="{{project_name}}" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
@@ -24,8 +24,8 @@
         <ENTRY IS_ENABLED="true" PARSER="env" IS_EXECUTABLE="false" PATH=".env" />
       </ENTRIES>
     </EXTENSION>
-    <option name="SCRIPT_NAME" value="env/bin/watchmedo" />
-    <option name="PARAMETERS" value="auto-restart --directory=./ --pattern=*.py --recursive -- celery -A {{project_name}} beat --loglevel=INFO" />
+    <option name="SCRIPT_NAME" value="env/bin/gunicorn" />
+    <option name="PARAMETERS" value="-k uvicorn.workers.UvicornWorker {{project_name}}.asgi --bind=0.0.0.0:8000 --reload --reload-extra-file migrations_sql" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

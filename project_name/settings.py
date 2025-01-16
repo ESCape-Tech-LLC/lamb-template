@@ -48,7 +48,7 @@ LAMB_APP_SCHEME = dpath_value(os.environ, "LAMB_APP_SCHEME", str, default="http"
 LAMB_APP_NAME = dpath_value(os.environ, "LAMB_APP_NAME", str, transform=validate_length, default=None)
 LAMB_APP_GOD_MODE = dpath_value(os.environ, "LAMB_APP_GOD_MODE", str, transform=transform_boolean, default=False)
 
-LAMB_LOG_JSON_ENABLE = dpath_value(os.environ, "LAMB_LOG_JSON_ENABLE", str, transform=transform_boolean, default=False)
+LAMB_LOG_JSON_ENABLE = dpath_value(os.environ, "LAMB_LOG_JSON_ENABLE", str, transform=transform_boolean, default=True)
 
 LAMB_RESPONSE_APPLY_TO_APPS = ["api"]
 LAMB_RESPONSE_DATETIME_TRANSFORMER = "lamb.utils.transformers.transform_datetime_milliseconds_int"
@@ -95,23 +95,41 @@ LAMB_ADD_CORS_ENABLED = dpath_value(
 )
 
 # SPO: db connections
+def _connect_options(
+    cfg, sync: bool, pooled: bool, target_session_attrs: str | None = None
+):
+    if cfg.multi_host and target_session_attrs is not None:
+        return {"target_session_attrs": target_session_attrs}
+    else:
+        return {}
+
+
 LAMB_DB_CONFIG = {
     "default": dict(
-        driver="pysqlite",
-        async_driver="aiosqlite",
-        host=":memory:",
-        db_name=None,
-        port=None,
-        username=None,
-        password=None,
-        # engine_options=_engine_options,
-        # aengine_options=_engine_options,
-        # connect_options=partial(_connect_options, target_session_attrs="read-write"),
-        # aconnect_options=partial(_connect_options, target_session_attrs="read-write"),
+        driver="postgresql+psycopg2",
+        async_driver="postgresql+asyncpg",
+        host=dpath_value(os.environ, "APP_POSTGRES_HOST", str),
+        db_name=dpath_value(os.environ, "APP_POSTGRES_NAME", str),
+        port=dpath_value(os.environ, "APP_POSTGRES_PORT", int, default=None),
+        username=dpath_value(os.environ, "APP_POSTGRES_USER", str),
+        password=dpath_value(os.environ, "APP_POSTGRES_PASS", str, default=""),
+        connect_options=partial(_connect_options, target_session_attrs="read-write"),
+        aconnect_options=partial(_connect_options, target_session_attrs="read-write"),
     ),
+    # "replica": dict(
+    #     driver="postgresql+psycopg2",
+    #     async_driver="postgresql+asyncpg",
+    #     host=dpath_value(os.environ, "APP_POSTGRES_HOST", str),
+    #     db_name=dpath_value(os.environ, "APP_POSTGRES_NAME", str),
+    #     port=dpath_value(os.environ, "APP_POSTGRES_PORT", int, default=None),
+    #     username=dpath_value(os.environ, "APP_POSTGRES_USER", str),
+    #     password=dpath_value(os.environ, "APP_POSTGRES_PASS", str, default=""),
+    #     connect_options=partial(_connect_options, target_session_attrs="prefer-standby"),
+    #     aconnect_options=partial(_connect_options, target_session_attrs="prefer-standby"),
+    # )
 }
 
-LAMB_DB_CONTEXT_POOLED_METRICS = True
+LAMB_DB_CONTEXT_POOLED_SETTINGS = True
 
 # SPO: S3 connections
 LAMB_S3_CONFIG = {
@@ -243,7 +261,7 @@ LOGGING = {
 inject_logging_factory()
 
 # django - main configs
-SECRET_KEY = dpath_value(os.environ, "CHATUP_API_SECRET_KEY", str)
+SECRET_KEY = "{{secret_key}}"
 
 DEBUG = LAMB_APP_DEBUG
 
