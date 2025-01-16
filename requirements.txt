@@ -1,2 +1,2 @@
 -r requirements-main.txt
-lamb[postgresql,boost,asgi,asyncio,asyncpg] @ git+https://github.com/ESCape-Tech-LLC/lamb-core.git@v3.4.11#egg=lamb
+lamb[postgresql,boost,asgi,asyncio,asyncpg] @ git+https://github.com/ESCape-Tech-LLC/lamb-core.git@v3.4.15#egg=lamb
