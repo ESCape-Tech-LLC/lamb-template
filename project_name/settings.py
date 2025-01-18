@@ -105,6 +105,7 @@ def _connect_options(
 
 
 LAMB_DB_CONFIG = {
+    # postgresql
     "default": dict(
         driver="postgresql+psycopg2",
         async_driver="postgresql+asyncpg",
@@ -126,6 +127,28 @@ LAMB_DB_CONFIG = {
     #     password=dpath_value(os.environ, "APP_POSTGRES_PASS", str, default=""),
     #     connect_options=partial(_connect_options, target_session_attrs="prefer-standby"),
     #     aconnect_options=partial(_connect_options, target_session_attrs="prefer-standby"),
+    # )
+
+    # # sqlite in-memory
+    # "default": dict(
+    #     driver="pysqlite",
+    #     async_driver="aiosqlite",
+    #     host=":memory:",
+    #     db_name=None,
+    #     port=None,
+    #     username=None,
+    #     password=None,
+    # ),
+
+    # # mysql
+    # "default": dict(
+    #     driver="mysql+pymysql",
+    #     async_driver="mysql+asyncmy",
+    #     host=dpath_value(os.environ, "APP_MYSQL_HOST", str),
+    #     db_name=dpath_value(os.environ, "APP_MYSQL_NAME", str),
+    #     port=dpath_value(os.environ, "APP_MYSQL_PORT", int, default=None),
+    #     username=dpath_value(os.environ, "APP_MYSQL_USER", str),
+    #     password=dpath_value(os.environ, "APP_MYSQL_PASS", str, default=""),
     # )
 }
 
