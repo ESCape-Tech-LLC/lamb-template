@@ -28,6 +28,7 @@ data/geoip/*
 # envs
 env/
 .env
+.env.secrets
 .env.host
 .env.dev
 
@@ -38,6 +39,7 @@ playground*.json
 playground*.md
 playground*.sh
 playground*.sql
+playground*.xml
 snippets.sh
 !playground-base.ipynb
 

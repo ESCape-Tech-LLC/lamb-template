@@ -6,6 +6,7 @@ import uuid
 from typing import Any, Self
 
 from dateutil.relativedelta import relativedelta
+from django.contrib.auth.hashers import check_password, make_password
 from sqlalchemy import (
     ForeignKey,
     Identity,
@@ -19,8 +20,6 @@ from sqlalchemy.orm import (
     object_session,
     relationship,
 )
-
-from django.contrib.auth.hashers import check_password, make_password
 
 import lamb.exc as exc
 from lamb.db import DeclarativeBase

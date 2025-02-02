@@ -30,13 +30,13 @@ logconfig_dict = {
     },
     "loggers": {
         "gunicorn.error": {
-            "level": "INFO",
+            "level": "WARNING",
             "handlers": ["error_console"],
             "propagate": True,
             "qualname": "gunicorn.error",
         },
         "gunicorn.access": {
-            "level": "INFO",
+            "level": "WARNING",
             "handlers": ["console"],
             "propagate": True,
             "qualname": "gunicorn.access",
@@ -69,7 +69,7 @@ backlog = 2048
 bind = ["127.0.0.1:8000", "[::1]:8000"]
 
 # max requests until worker rotate
-max_requests = 2048
+max_requests = 4096
 max_requests_jitter = 128
 
 # processing/harakiri timeout

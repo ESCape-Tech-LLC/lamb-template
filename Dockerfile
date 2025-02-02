@@ -1,4 +1,4 @@
-FROM python:3.12-slim-bookworm
+FROM python:3.13-slim-bookworm
 
 
 # tools
@@ -42,7 +42,6 @@ RUN git config --global http.sslverify "false"  \
 # application
 WORKDIR /app
 COPY . /app
-#COPY configs/docker/config.py /app/configs/config.py
 
 
 # cleanup

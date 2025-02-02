@@ -1,6 +1,7 @@
 import logging
 
 from lamb.management.base import LambCommand
+
 # Lamb Framework
 from lamb.utils import import_by_name
 

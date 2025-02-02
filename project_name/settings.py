@@ -12,14 +12,18 @@ import furl
 
 import lamb.service.redis.config as redisCfg
 
-# Lamb Framework
 from lamb.json import JsonEncoder
 from lamb.log.constants import LAMB_LOG_FORMAT_PREFIXNO, LAMB_LOG_FORMAT_SIMPLE
 from lamb.log.utils import inject_logging_factory
 from lamb.service.aws.s3 import S3BucketConfig
 from lamb.utils import dpath_value, masked_url
 from lamb.utils.core import masked_dict
-from lamb.utils.transformers import tf_list_int, tf_list_string, transform_boolean, transform_string_enum
+from lamb.utils.transformers import (
+    tf_list_int,
+    tf_list_string,
+    transform_boolean,
+    transform_string_enum,
+)
 from lamb.utils.validators import (
     validate_length,
 )
@@ -49,15 +53,16 @@ LAMB_APP_NAME = dpath_value(os.environ, "LAMB_APP_NAME", str, transform=validate
 LAMB_APP_GOD_MODE = dpath_value(os.environ, "LAMB_APP_GOD_MODE", str, transform=transform_boolean, default=False)
 
 LAMB_LOG_JSON_ENABLE = dpath_value(os.environ, "LAMB_LOG_JSON_ENABLE", str, transform=transform_boolean, default=True)
+LAMB_LOG_FORMAT_TIME_ZONE = "UTC"
+LAMB_LOG_HEADER_XRAY = "HTTP_X_LAMB_XRAY"
+LAMB_LOG_HEADER_XLINE = "HTTP_X_LAMB_XLINE"
+# LAMB_LOG_FORMAT_TIME_SPEC = 'milliseconds'
 
 LAMB_RESPONSE_APPLY_TO_APPS = ["api"]
 LAMB_RESPONSE_DATETIME_TRANSFORMER = "lamb.utils.transformers.transform_datetime_milliseconds_int"
 LAMB_RESPONSE_DATE_FORMAT = "%Y.%m.%d"
 
 LAMB_DPATH_DICT_ENGINE = "reduce"
-
-LAMB_LOGGING_HEADER_XRAY = "HTTP_X_LAMB_LOGGING_XRAY"
-LAMB_EVENT_LOGGING_HEADER_TRACKID = "HTTP_X_LAMB_LOGGING_TRACKID"
 
 LAMB_DEVICE_INFO_COLLECT_IP = True
 LAMB_DEVICE_INFO_COLLECT_GEO = False
@@ -94,10 +99,9 @@ LAMB_ADD_CORS_ENABLED = dpath_value(
     default=False,
 )
 
+
 # SPO: db connections
-def _connect_options(
-    cfg, sync: bool, pooled: bool, target_session_attrs: str | None = None
-):
+def _connect_options(cfg, sync: bool, pooled: bool, target_session_attrs: str | None = None):
     if cfg.multi_host and target_session_attrs is not None:
         return {"target_session_attrs": target_session_attrs}
     else:
@@ -128,7 +132,6 @@ LAMB_DB_CONFIG = {
     #     connect_options=partial(_connect_options, target_session_attrs="prefer-standby"),
     #     aconnect_options=partial(_connect_options, target_session_attrs="prefer-standby"),
     # )
-
     # # sqlite in-memory
     # "default": dict(
     #     driver="pysqlite",
@@ -139,7 +142,6 @@ LAMB_DB_CONFIG = {
     #     username=None,
     #     password=None,
     # ),
-
     # # mysql
     # "default": dict(
     #     driver="mysql+pymysql",
@@ -182,7 +184,11 @@ LAMB_REDIS_SENTINEL_PASS = dpath_value(
     os.environ, "LAMB_REDIS_SENTINEL_PASS", str, transform=validate_length, default=None
 )
 LAMB_REDIS_SENTINEL_SERVICE_NAME = dpath_value(
-    os.environ, "LAMB_REDIS_SENTINEL_SERVICE_NAME", str, transform=validate_length, default=None
+    os.environ,
+    "LAMB_REDIS_SENTINEL_SERVICE_NAME",
+    str,
+    transform=validate_length,
+    default=None,
 )
 
 _redis_main_configs = {
@@ -205,7 +211,6 @@ LAMB_BROKER_RESULT_URL = LAMB_REDIS_CONFIG["result"].broker_url
 LAMB_BROKER_TRANSPORT_OPTIONS = LAMB_REDIS_CONFIG["broker"].broker_transport_options
 LAMB_BROKER_RESULT_TRANSPORT_OPTIONS = LAMB_REDIS_CONFIG["result"].broker_transport_options
 
-
 # Lamb: dynamic configs
 LAMB_GEOIP2_DB_CITY = BASE_DIR.joinpath("data", "geoip", "GeoLite2-City.mmdb")
 LAMB_GEOIP2_DB_COUNTRY = BASE_DIR.joinpath("data", "geoip", "GeoLite2-Country.mmdb")
@@ -227,7 +232,7 @@ LAMB_ORIGIN_URL = _full_host.origin
 LAMB_STATIC_URL = _full_host.set(path="static").url
 LAMB_SYSTEM_STATIC_URL = _full_host.set(path="system-static").url
 
-with open(os.path.join(BASE_DIR, "VERSION"), "r") as f:
+with open(os.path.join(BASE_DIR, "VERSION")) as f:
     LAMB_APP_VERSION = f.read()
     LAMB_APP_VERSION = "".join(LAMB_APP_VERSION.split())  # bump2version sometime adds \n symbol
 
@@ -370,7 +375,14 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE
 # collect main details and log
 _msg = {
     "DATABASES": {
-        k: masked_dict(v, "password", "engine_options", "aengine_options", "connect_options", "aconnect_options")
+        k: masked_dict(
+            v,
+            "password",
+            "engine_options",
+            "aengine_options",
+            "connect_options",
+            "aconnect_options",
+        )
         for k, v in LAMB_DB_CONFIG.items()
     },
     "REDIS": dict(

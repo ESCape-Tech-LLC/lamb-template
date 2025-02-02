@@ -10,8 +10,7 @@ source env/bin/activate
 
 set -a
 source .env
-#source ../docker/.env
-#source ../docker/.env.dev
+source .env.secrets
 set +a
 
 hash -r 2>/dev/null

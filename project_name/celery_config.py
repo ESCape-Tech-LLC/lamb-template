@@ -3,17 +3,14 @@ import os
 
 from celery import Celery
 from celery.signals import after_setup_logger, after_setup_task_logger
+from django.conf import settings
 from kombu import Exchange, Queue
 
-from django.conf import settings
-
-# Lamb Framework
+import lamb.log.constants
 from lamb.log.formatters import CeleryJsonFormatter, CeleryMultilineFormatter
 
 __all__ = ["celery_app", "CeleryQueues"]
 
-# Lamb Framework
-import lamb.log.constants
 
 # Django init
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "{{project_name}}.settings")
@@ -51,12 +48,7 @@ celery_app = Celery(
 # Celery Beat tasks
 celery_app.conf.beat_schedule = {}
 
-
-#
-if settings.LAMB_LOG_JSON_ENABLE:
-    celery_formatter_cls = CeleryJsonFormatter
-else:
-    celery_formatter_cls = CeleryMultilineFormatter
+celery_formatter_cls = CeleryJsonFormatter if settings.LAMB_LOG_JSON_ENABLE else CeleryMultilineFormatter
 
 
 @after_setup_task_logger.connect

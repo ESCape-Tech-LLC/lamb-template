@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import enum
-from typing import Any, Optional, Type, TypeVar
+from typing import Any, TypeVar
 
 import sqlalchemy as sa
 from sqlalchemy_utils.types.scalar_coercible import ScalarCoercible
@@ -25,7 +25,7 @@ class _EncodeMixin(ResponseEncodableMixin):
 
 
 class _EnumMixin(_EncodeMixin):
-    title: Optional[str] = None
+    title: str | None = None
 
     def __new__(cls, code, title, *args, **kwargs):
         obj = object.__new__(cls)
@@ -118,13 +118,13 @@ class IntStrEnumType(sa.types.TypeDecorator, ScalarCoercible):
     def python_type(self):
         return self._enum_type
 
-    _enum_type: Type[ET]
-    _impl_type: Type[sa.types.Integer]
+    _enum_type: type[ET]
+    _impl_type: type[sa.types.Integer]
 
     def __init__(
         self,
-        enum_type: Type[ET],
-        impl_type: Optional[Type[sa.Integer]] = None,
+        enum_type: type[ET],
+        impl_type: type[sa.Integer] | None = None,
         *args,
         **kwargs,
     ):
@@ -138,7 +138,7 @@ class IntStrEnumType(sa.types.TypeDecorator, ScalarCoercible):
         else:
             return dialect.type_descriptor(self.impl)
 
-    def process_bind_param(self, value: Optional[ET], dialect):
+    def process_bind_param(self, value: ET | None, dialect):
         if value is None:
             return None
 
@@ -147,7 +147,7 @@ class IntStrEnumType(sa.types.TypeDecorator, ScalarCoercible):
         else:
             return value
 
-    def process_result_value(self, value: Optional[Any], dialect):
+    def process_result_value(self, value: Any | None, dialect):
         if value is None:
             return None
         try:
@@ -155,7 +155,7 @@ class IntStrEnumType(sa.types.TypeDecorator, ScalarCoercible):
         except ValueError as e:
             raise exc.InvalidParamValueError(f"Unknown enum value: {value}") from e
 
-    def _coerce(self, value: Optional[Any]) -> Optional[ET]:
+    def _coerce(self, value: Any | None) -> ET | None:
         if value is not None and not isinstance(value, self._enum_type):
             try:
                 return self._enum_type(value)

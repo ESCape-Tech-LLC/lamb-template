@@ -13,16 +13,23 @@ filename = "VERSION"
 
 
 [tool.ruff]
-target-version = "py312"
+target-version = "py313"
 line-length = 120
+exclude = [
+    "playground*.ipynb"
+]
 
 [tool.ruff.lint]
-extend-select = ["A", "FA", "I"]
-fixable = ["I"]
+extend-select = ["A", "FA", "I", "UP", "SIM"]
+fixable = ["I", "UP", "SIM"]
 
 [tool.ruff.lint.isort]
-section-order = ["future", "standard-library", "third-party", "django", "lamb", "first-party", "local-folder"]
+section-order = ["future", "standard-library", "third-party", "lamb", "first-party", "local-folder"]
 
 [tool.ruff.lint.isort.sections]
-"django" = ["django"]
 "lamb" = ["lamb"]
+
+[tool.ruff.format]
+docstring-code-format = true
+quote-style = "double"
+indent-style = "space"

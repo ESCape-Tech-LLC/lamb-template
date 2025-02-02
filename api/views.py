@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from django.conf import settings
+
 from lamb.rest.decorators import a_rest_allowed_http_methods
 from lamb.rest.rest_view import RestView
 from lamb.utils import LambRequest
@@ -15,9 +16,7 @@ class HandbooksView(RestView):
 
         result = {}
         for key, _enum in enums.items():
-            result[key] = [
-                m.handbook_encode() for m in _enum if m.handbook_encode() is not None
-            ]
+            result[key] = [m.handbook_encode() for m in _enum if m.handbook_encode() is not None]
 
         result["main"] = {
             "some_other_config": 10,
