@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="{{project_name}}:all" type="CompoundRunConfigurationType">
+    <toRun name="{{project_name}}:api:asgi" type="PythonConfigurationType" />
+    <toRun name="{{project_name}}:celery:beat" type="PythonConfigurationType" />
+    <toRun name="{{project_name}}:celery:worker" type="PythonConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>

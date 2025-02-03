@@ -10,7 +10,7 @@ source env/bin/activate
 
 set -a
 source .env
-source .env.secrets
+#source .env.secrets
 set +a
 
 hash -r 2>/dev/null

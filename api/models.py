@@ -23,7 +23,7 @@ from sqlalchemy.orm import (
 
 import lamb.exc as exc
 from lamb.db import DeclarativeBase
-from lamb.db.logging import sql_logging_enable
+from lamb.db.log import sql_logging_enable
 from lamb.db.mixins import TimeMarksMixinTZ
 from lamb.json.mixins import ResponseEncodableMixin
 from lamb.types.annotations.postgresql import (

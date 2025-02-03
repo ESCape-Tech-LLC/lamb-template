@@ -1,8 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="app:all" type="CompoundRunConfigurationType">
-    <toRun name="api:gunicorn-asgi" type="PythonConfigurationType" />
-    <toRun name="celery:beat" type="PythonConfigurationType" />
-    <toRun name="celery:worker" type="PythonConfigurationType" />
-    <method v="2" />
-  </configuration>
-</component>

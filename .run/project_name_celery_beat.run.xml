@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="celery:beat" type="PythonConfigurationType" factoryName="Python">
+  <configuration default="false" name="{{project_name}}:celery:beat" type="PythonConfigurationType" factoryName="Python">
     <module name="{{project_name}}" />
-    <option name="ENV_FILES" value="$PROJECT_DIR$/.env:$PROJECT_DIR$/.env.secrets" />
+    <option name="ENV_FILES" value="$PROJECT_DIR$/.env" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
@@ -9,7 +9,7 @@
     </envs>
     <option name="SDK_HOME" value="" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-    <option name="IS_MODULE_SDK" value="false" />
+    <option name="IS_MODULE_SDK" value="true" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />

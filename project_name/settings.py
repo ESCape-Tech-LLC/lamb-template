@@ -56,7 +56,10 @@ LAMB_LOG_JSON_ENABLE = dpath_value(os.environ, "LAMB_LOG_JSON_ENABLE", str, tran
 LAMB_LOG_FORMAT_TIME_ZONE = "UTC"
 LAMB_LOG_HEADER_XRAY = "HTTP_X_LAMB_XRAY"
 LAMB_LOG_HEADER_XLINE = "HTTP_X_LAMB_XLINE"
-# LAMB_LOG_FORMAT_TIME_SPEC = 'milliseconds'
+LAMB_LOG_FORMAT_TIME_SPEC = 'milliseconds'
+LAMB_LOG_SQL_VERBOSE = dpath_value(os.environ, "LAMB_LOG_SQL_VERBOSE", str, transform=transform_boolean, default=False)
+LAMB_LOG_SQL_VERBOSE_THRESHOLD = dpath_value(os.environ, "LAMB_LOG_SQL_VERBOSE_THRESHOLD", float, default=None)
+
 
 LAMB_RESPONSE_APPLY_TO_APPS = ["api"]
 LAMB_RESPONSE_DATETIME_TRANSFORMER = "lamb.utils.transformers.transform_datetime_milliseconds_int"
@@ -66,9 +69,6 @@ LAMB_DPATH_DICT_ENGINE = "reduce"
 
 LAMB_DEVICE_INFO_COLLECT_IP = True
 LAMB_DEVICE_INFO_COLLECT_GEO = False
-
-LAMB_VERBOSE_SQL_LOG = dpath_value(os.environ, "LAMB_VERBOSE_SQL_LOG", str, transform=transform_boolean, default=False)
-LAMB_VERBOSE_SQL_LOG_THRESHOLD = dpath_value(os.environ, "LAMB_VERBOSE_SQL_LOG_THRESHOLD", float, default=None)
 
 LAMB_EXECUTION_TIME_STORE = dpath_value(
     os.environ,
@@ -101,7 +101,9 @@ LAMB_ADD_CORS_ENABLED = dpath_value(
 
 
 # SPO: db connections
-def _connect_options(cfg, sync: bool, pooled: bool, target_session_attrs: str | None = None):
+def _connect_options(
+    cfg, sync: bool, pooled: bool, target_session_attrs: str | None = None
+):
     if cfg.multi_host and target_session_attrs is not None:
         return {"target_session_attrs": target_session_attrs}
     else:
@@ -154,6 +156,7 @@ LAMB_DB_CONFIG = {
     # )
 }
 
+LAMB_DB_CONTEXT_POOLED_METRICS = True
 LAMB_DB_CONTEXT_POOLED_SETTINGS = True
 
 # SPO: S3 connections
@@ -211,6 +214,7 @@ LAMB_BROKER_RESULT_URL = LAMB_REDIS_CONFIG["result"].broker_url
 LAMB_BROKER_TRANSPORT_OPTIONS = LAMB_REDIS_CONFIG["broker"].broker_transport_options
 LAMB_BROKER_RESULT_TRANSPORT_OPTIONS = LAMB_REDIS_CONFIG["result"].broker_transport_options
 
+
 # Lamb: dynamic configs
 LAMB_GEOIP2_DB_CITY = BASE_DIR.joinpath("data", "geoip", "GeoLite2-City.mmdb")
 LAMB_GEOIP2_DB_COUNTRY = BASE_DIR.joinpath("data", "geoip", "GeoLite2-Country.mmdb")
@@ -237,9 +241,7 @@ with open(os.path.join(BASE_DIR, "VERSION")) as f:
     LAMB_APP_VERSION = "".join(LAMB_APP_VERSION.split())  # bump2version sometime adds \n symbol
 
 # logging
-_log_fmt_cls = (
-    "lamb.log.formatters.RequestJsonFormatter" if LAMB_LOG_JSON_ENABLE else "lamb.log.formatters.MultilineFormatter"
-)
+_log_fmt_cls = "lamb.log.formatters.RequestJsonFormatter" if LAMB_LOG_JSON_ENABLE else "lamb.log.formatters.MultilineFormatter"
 _log_fmt = LAMB_LOG_FORMAT_SIMPLE if sys.platform == "darwin" else LAMB_LOG_FORMAT_PREFIXNO
 
 LOGGING = {
